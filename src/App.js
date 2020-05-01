@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Switch } from "antd";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyles } from "../src/components/globalStyles";
+import { useDarkMode } from "./hooks/darkmode";
+import { lightTheme, darkTheme } from "../src/components/Themes";
+import AppRouter from "./router/AppRouter";
+import "./App.css";
 
 function App() {
+  const [theme, themeToggler] = useDarkMode();
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
+
+  console.log("Initial theme: ", theme);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={themeMode}>
+      <>
+        <GlobalStyles />
+        <div className="App">
+          <div className="toggler">
+            <Switch
+              unCheckedChildren="light"
+              checkedChildren="dark"
+              defaultChecked={theme === "dark"}
+              onChange={themeToggler}
+            />
+          </div>
+          <div className="App-header">
+            <AppRouter />
+          </div>
+        </div>
+      </>
+    </ThemeProvider>
   );
 }
 
